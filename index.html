@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AstraPath · The right room, not just the right building</title>
+  <meta name="description" content="AstraPath gives indoor directions from the front door to the room. Which entrance, which hallway, which elevator, which door. Free for everyone walking. Live at Columbia.">
+  <meta name="theme-color" content="#070708">
+  <link rel="icon" href="assets/mark-black.png" type="image/png">
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    try {
+      if (sessionStorage.getItem("astrapath-banner") === "off") {
+        document.documentElement.classList.add("banner-off");
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <div class="banner" id="banner">
+    <p><span class="banner-full">Live at Columbia. Northwest Corner, Pupin, CEPSR, and Mudd.</span><span class="banner-short">Live at Columbia.</span> <a href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">Open the demo</a></p>
+    <button type="button" class="banner-close" id="banner-close" aria-label="Dismiss announcement">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <header class="header" id="header">
+    <a class="brand" href="#top" aria-label="AstraPath, home">
+      <img class="brand-mark on-dark" src="assets/mark-white.png" alt="" width="39" height="28">
+      <img class="brand-word on-dark" src="assets/word-white.png" alt="" width="118" height="19">
+      <img class="brand-mark on-light" src="assets/mark-black.png" alt="" width="39" height="28">
+      <img class="brand-word on-light" src="assets/word-black.png" alt="" width="118" height="19">
+    </a>
+    <div class="header-actions">
+      <a class="btn-solid" href="#get-started">Get started</a>
+      <div class="tool-group">
+        <button type="button" class="icon-btn" id="search-open" aria-expanded="false" aria-controls="search" aria-label="Search routes">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.25" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.2 15.2 L20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="menu-open" aria-expanded="false" aria-controls="menu" aria-label="Open menu">
+          <svg class="icon-menu" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="overlay menu" id="menu" hidden>
+    <div class="overlay-inner menu-grid">
+      <nav aria-label="Primary">
+        <p class="kicker">Navigation</p>
+        <ul class="menu-links">
+          <li><a href="#product">Product</a></li>
+          <li><a href="#method">How it works</a></li>
+          <li><a href="#platforms">Platforms</a></li>
+          <li><a href="#running">Where it runs</a></li>
+          <li><a href="#buildings">For buildings</a></li>
+        </ul>
+      </nav>
+      <div>
+        <p class="kicker">Quick links</p>
+        <ul class="quick-links">
+          <li><a href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">Columbia demo</a></li>
+          <li><button type="button" data-open-search>Try a route</button></li>
+          <li><a href="#heard">What we heard</a></li>
+          <li><a href="#get-started">Join the waitlist</a></li>
+        </ul>
+        <blockquote class="menu-quote">
+          <p>“I just want someone to tell me exactly where to go.”</p>
+          <footer>A student we interviewed</footer>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay search-panel" id="search" hidden>
+    <div class="overlay-inner search-inner">
+      <label class="kicker" for="route-query">Try a route</label>
+      <div class="search-row">
+        <input id="route-query" type="search" placeholder="Where are you going?" autocomplete="off" enterkeyhint="search">
+        <button type="button" class="text-btn" id="search-close">Close</button>
+      </div>
+      <div class="suggestions" id="suggestions">
+        <p class="suggest-label">Examples from the Columbia story</p>
+        <div class="chips">
+          <button type="button" data-query="Room 405">Room 405</button>
+          <button type="button" data-query="Somewhere quiet before 2 pm in Mudd">Somewhere quiet before 2 pm</button>
+          <button type="button" data-query="Step-free to 512">Step-free to 512</button>
+          <button type="button" data-query="Water fountain on floor 5">Fountain on floor 5</button>
+        </div>
+      </div>
+      <div class="route-result" id="route-result" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <main id="content">
+    <section class="hero" id="top">
+      <div class="hero-media" aria-hidden="true">
+        <img class="hero-mark" src="assets/mark-white.png" alt="">
+        <svg class="hero-plan" viewBox="0 0 320 180">
+          <rect width="320" height="180" fill="none"/>
+          <g fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.2">
+            <path d="M16 20 H304 V164 H16 Z"/>
+            <path d="M16 78 H210"/>
+            <path d="M16 118 H210"/>
+            <path d="M210 78 V164"/>
+            <path d="M78 20 V78"/>
+            <path d="M150 20 V78"/>
+          </g>
+          <path d="M40 48 V98 H210 V146 H250" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M210 98 H286" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" stroke-dasharray="3 4"/>
+          <g fill="rgba(255,255,255,0.7)" font-family="Satoshi, Helvetica, sans-serif" font-size="11" letter-spacing="1.4">
+            <text x="24" y="16">FLOOR 4</text>
+            <text x="22" y="44">STAIRS</text>
+            <text x="158" y="70">410</text>
+            <text x="236" y="94">DEAD END</text>
+            <text x="230" y="158">405</text>
+          </g>
+        </svg>
+        <div class="hero-shade"></div>
+      </div>
+      <div class="hero-copy">
+        <h1>The right room, not just the right building.</h1>
+        <p class="deck">Maps get you to the front door. AstraPath takes you the rest of the way: which entrance, which hallway, which elevator, which door.</p>
+      </div>
+      <div class="hero-meta">
+        <span>Free for everyone walking</span>
+        <span>On the web, nothing to install</span>
+        <span>Illustration · the two turns to room 405</span>
+      </div>
+    </section>
+
+    <section class="featured" aria-labelledby="featured-title">
+      <div class="feature-frame">
+        <h2 id="featured-title" class="visually-hidden">Featured</h2>
+        <div class="feature-bar">
+          <div class="tabs" role="tablist" aria-label="Featured">
+            <button type="button" role="tab" id="tab-columbia" aria-controls="panel-columbia" aria-selected="true">Columbia</button>
+            <button type="button" role="tab" id="tab-stepfree" aria-controls="panel-stepfree" aria-selected="false" tabindex="-1">Step-free</button>
+            <button type="button" role="tab" id="tab-assist" aria-controls="panel-assist" aria-selected="false" tabindex="-1">Assistants</button>
+            <button type="button" role="tab" id="tab-towers" aria-controls="panel-towers" aria-selected="false" tabindex="-1">Towers</button>
+          </div>
+          <div class="pager">
+            <button type="button" id="feature-prev" aria-label="Previous feature">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M14 6 L8 12 L14 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" id="feature-next" aria-label="Next feature">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 6 L16 12 L10 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <article class="feature" id="panel-columbia" role="tabpanel" aria-labelledby="tab-columbia">
+          <div class="feature-visual">
+            <svg viewBox="0 0 1400 860" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="1400" height="860" fill="#14161c"/>
+              <g fill="#1b1e27" stroke="rgba(255,255,255,0.38)" stroke-width="1.4">
+                <rect x="520" y="150" width="760" height="72"/>
+                <rect x="520" y="286" width="760" height="72"/>
+                <rect x="520" y="422" width="760" height="72"/>
+                <rect x="520" y="558" width="760" height="72"/>
+                <rect x="520" y="694" width="760" height="72"/>
+              </g>
+              <g fill="rgba(255,255,255,0.72)" font-family="Satoshi, Helvetica, sans-serif" font-size="20">
+                <text x="488" y="194" text-anchor="end">5</text>
+                <text x="488" y="330" text-anchor="end">4</text>
+                <text x="488" y="466" text-anchor="end">3</text>
+                <text x="488" y="602" text-anchor="end">2</text>
+                <text x="488" y="738" text-anchor="end">1</text>
+              </g>
+              <path class="route" pathLength="100" d="M600 730 H700 V594 H820 L980 322 H1080 V186 H1180" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="600" cy="730" r="5" fill="#fff"/>
+              <circle cx="1180" cy="186" r="5" fill="#fff"/>
+              <g fill="rgba(255,255,255,0.62)" font-family="Satoshi, Helvetica, sans-serif" font-size="15" letter-spacing="1.5">
+                <text x="610" y="768">WEST GATE</text>
+                <text x="1090" y="168">FOUNTAIN</text>
+              </g>
+              <defs>
+                <linearGradient id="fadeColumbia" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#14161c"/>
+                  <stop offset="0.42" stop-color="#14161c" stop-opacity="0.55"/>
+                  <stop offset="0.7" stop-color="#14161c" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <rect width="760" height="860" fill="url(#fadeColumbia)"/>
+            </svg>
+            <div class="plate">
+              <p class="kicker">Columbia</p>
+              <h3><a href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">From the West Gate to a fountain on floor 5 <span class="go" aria-hidden="true">↗</span></a></h3>
+            </div>
+            <p class="caption">Northwest Corner Building · stairs 1→2, escalator 2→4, library stairs to 5 · 7 steps, about 2 min</p>
+          </div>
+        </article>
+
+        <article class="feature" id="panel-stepfree" role="tabpanel" aria-labelledby="tab-stepfree" hidden>
+          <div class="feature-visual">
+            <svg viewBox="0 0 1400 860" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="1400" height="860" fill="#14161c"/>
+              <g fill="#1b1e27" stroke="rgba(255,255,255,0.32)" stroke-width="1.4">
+                <rect x="500" y="150" width="780" height="72"/>
+                <rect x="500" y="286" width="780" height="72"/>
+                <rect x="500" y="422" width="780" height="72"/>
+                <rect x="500" y="558" width="780" height="72"/>
+                <rect x="500" y="694" width="780" height="72"/>
+              </g>
+              <rect x="860" y="120" width="92" height="680" fill="#101218" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+              <path class="route" pathLength="100" d="M640 730 H906 V186 H1120" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+              <rect x="876" y="164" width="60" height="48" fill="#fff"/>
+              <g fill="rgba(255,255,255,0.75)" font-family="Satoshi, Helvetica, sans-serif" font-size="18">
+                <text x="980" y="194">5 · stop</text>
+                <text x="980" y="330">4</text>
+                <text x="980" y="466">3 · stop</text>
+                <text x="980" y="602">2</text>
+                <text x="980" y="738">1 · stop</text>
+                <text x="1120" y="168">512</text>
+              </g>
+              <defs>
+                <linearGradient id="fadeStep" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#14161c"/>
+                  <stop offset="0.4" stop-color="#14161c" stop-opacity="0.5"/>
+                  <stop offset="0.68" stop-color="#14161c" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <rect width="720" height="860" fill="url(#fadeStep)"/>
+            </svg>
+            <div class="plate">
+              <p class="kicker">Step-free</p>
+              <h3><a href="#method">The elevator, named, and the floors it reaches <span class="go" aria-hidden="true">↗</span></a></h3>
+            </div>
+            <p class="caption">This car serves floors 1, 3, and 5. Step-free is a route of its own.</p>
+          </div>
+        </article>
+
+        <article class="feature" id="panel-assist" role="tabpanel" aria-labelledby="tab-assist" hidden>
+          <div class="feature-visual visual-assist">
+            <img class="watermark" src="assets/mark-white.png" alt="">
+            <div class="plate">
+              <p class="kicker">Assistants</p>
+              <h3><a href="#platforms">“Somewhere quiet to wait before my 2 pm in Mudd” <span class="go" aria-hidden="true">↗</span></a></h3>
+            </div>
+            <p class="caption">AI works out the place. The map returns a route through hallways that exist.</p>
+          </div>
+        </article>
+
+        <article class="feature" id="panel-towers" role="tabpanel" aria-labelledby="tab-towers" hidden>
+          <div class="feature-visual">
+            <svg viewBox="0 0 1400 860" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="1400" height="860" fill="#14161c"/>
+              <g stroke="rgba(255,255,255,0.22)" stroke-width="1">
+                <path d="M620 80 V800 M980 80 V800" fill="none"/>
+                <path d="M760 70 V810 M840 70 V810" fill="none" stroke="rgba(255,255,255,0.45)"/>
+              </g>
+              <g stroke="rgba(255,255,255,0.2)" stroke-width="1">
+                <path d="M620 96 H980 M620 128 H980 M620 160 H980 M620 192 H980 M620 224 H980 M620 256 H980 M620 288 H980 M620 320 H980 M620 352 H980 M620 384 H980 M620 416 H980 M620 448 H980 M620 480 H980 M620 512 H980 M620 544 H980 M620 576 H980 M620 608 H980 M620 640 H980 M620 672 H980 M620 704 H980 M620 736 H980 M620 768 H980" fill="none"/>
+              </g>
+              <path class="route" pathLength="100" d="M800 790 V210 H920" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="920" cy="210" r="5" fill="#fff"/>
+              <g fill="rgba(255,255,255,0.7)" font-family="Satoshi, Helvetica, sans-serif" font-size="16" letter-spacing="1.6">
+                <text x="1000" y="214">LEVEL</text>
+                <text x="640" y="792">LOBBY</text>
+              </g>
+              <defs>
+                <linearGradient id="fadeTower" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#14161c"/>
+                  <stop offset="0.38" stop-color="#14161c" stop-opacity="0.35"/>
+                  <stop offset="0.62" stop-color="#14161c" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <rect width="700" height="860" fill="url(#fadeTower)"/>
+            </svg>
+            <div class="plate">
+              <p class="kicker">Towers</p>
+              <h3><a href="#running">Tested in supertall buildings, including Shanghai <span class="go" aria-hidden="true">↗</span></a></h3>
+            </div>
+            <p class="caption">Shanghai World Financial Center, CWTC 3A, and other buildings in the US and China.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="paper" id="product">
+      <div class="shell">
+        <div class="split">
+          <div>
+            <h2>Getting to the building is solved.</h2>
+            <p class="display-2">The minutes inside it are not.</p>
+          </div>
+          <p class="split-note">We talked with students and families and read Reddit threads from people trying to find rooms. The same three problems kept coming up.</p>
+        </div>
+
+        <div class="problems" id="heard">
+          <article class="problem">
+            <p class="index">01</p>
+            <h3>Maps stop at the front door.</h3>
+            <p>The map’s job ends at the building. Inside, people fall back on signs, room numbers, and following the crowd.</p>
+            <blockquote>
+              <p>“Google Maps had done its job by getting me to Hamilton.”</p>
+              <footer>A Columbia first-year who arrived about four minutes late to a discussion section</footer>
+            </blockquote>
+          </article>
+          <article class="problem">
+            <p class="index">02</p>
+            <h3>“Floor four” isn’t a direction.</h3>
+            <p>Most people can find the floor. They lose the minutes choosing the hallway, then walking back from a dead end.</p>
+            <blockquote>
+              <p>“If the inside directions were vague, like ‘go to floor four,’ I was already doing that.”</p>
+              <footer>The same first-year</footer>
+            </blockquote>
+          </article>
+          <article class="problem">
+            <p class="index">03</p>
+            <h3>One wrong turn ends the trust.</h3>
+            <p>Asked what would worry them, four of the six people we interviewed about indoor directions named accuracy first.</p>
+            <blockquote>
+              <p>“If it tells me to turn left and there’s actually no hallway there, I’m going to stop trusting it.”</p>
+              <footer>A student we interviewed</footer>
+            </blockquote>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ink" id="method">
+      <div class="shell">
+        <p class="kicker">How it works</p>
+        <h2>From the door to the room, in three steps.</h2>
+        <ol class="steps">
+          <li>
+            <span>01</span>
+            <h3>Open it where you are</h3>
+            <p>From a link in your calendar, a QR code at the entrance, the iPhone app, or your AI assistant.</p>
+          </li>
+          <li>
+            <span>02</span>
+            <h3>Say where you’re going</h3>
+            <p>Type a room number, or ask in your own words. “Somewhere quiet to wait before my 2 pm in Mudd.”</p>
+          </li>
+          <li>
+            <span>03</span>
+            <h3>Follow what you’ll actually see</h3>
+            <p>Every step names the hallway, the door, or the elevator and the floors it reaches.</p>
+          </li>
+        </ol>
+
+        <div class="specimen">
+          <div>
+            <p class="kicker">A real Columbia route</p>
+            <h3>Northwest Corner Building</h3>
+            <p class="specimen-line">West Gate, floor 1 <span aria-hidden="true">→</span> Water fountain, library side, floor 5</p>
+            <p class="specimen-meta">7 steps · about 2 min · 3 rides · 2 changes</p>
+          </div>
+          <ol class="legs">
+            <li><span>01</span><div><strong>Stairs</strong><p>Floor 1 to floor 2</p></div></li>
+            <li><span>02</span><div><strong>Escalator</strong><p>Floor 2 to floor 4</p></div></li>
+            <li><span>03</span><div><strong>Library stairs</strong><p>Floor 4 to floor 5</p></div></li>
+          </ol>
+        </div>
+
+        <div class="ai-block">
+          <h3>AI understands the question. The map gives the answer.</h3>
+          <p class="ai-lead">Routes are computed from a model of the building, step by step. AI never invents a hallway.</p>
+          <div class="ai-grid">
+            <div>
+              <h4>What AI does</h4>
+              <ul>
+                <li>Works out what you mean by “somewhere to print” or “the nearest restroom”</li>
+                <li>Suggests places that fit what you asked for</li>
+                <li>Answers follow-up questions in plain words</li>
+              </ul>
+            </div>
+            <div>
+              <h4>What the map does</h4>
+              <ul>
+                <li>Finds the route through the building’s own hallways, doors, stairs, and elevators</li>
+                <li>Uses only connections that exist in the map</li>
+                <li>Keeps step-free routes and door rules exact</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper who" id="who">
+      <div class="shell">
+        <h2>One building, a different route for each person.</h2>
+        <div class="who-grid">
+          <article>
+            <h3>First visit, ten minutes to spare</h3>
+            <p>Which hallway, which stairwell, and which elevator actually goes to your floor.</p>
+          </article>
+          <article>
+            <h3>Visiting, not working there</h3>
+            <p>The entrance visitors use and where to check in. Where a building shares its access rules, the route uses only doors open to you.</p>
+          </article>
+          <article>
+            <h3>Need the step-free way</h3>
+            <p>Ramps and elevators, with the elevator named and the floors it reaches. Step-free is a route of its own, not a hidden setting.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper tight" id="platforms">
+      <div class="shell">
+        <p class="kicker">Where you open it</p>
+        <h2>On the web, on your iPhone, and in your AI assistant.</h2>
+        <div class="platforms">
+          <a class="platform" href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">
+            <div>
+              <h3>Web</h3>
+              <p>Opens from a link or a QR code at the entrance. Nothing to install.</p>
+            </div>
+            <span class="status">Available</span>
+            <span class="go" aria-hidden="true">↗</span>
+          </a>
+          <a class="platform" href="#get-started">
+            <div>
+              <h3>iPhone</h3>
+              <p>For the buildings you use every week.</p>
+            </div>
+            <span class="status">Available</span>
+            <span class="go" aria-hidden="true">↗</span>
+          </a>
+          <a class="platform" href="#get-started">
+            <div>
+              <h3>AI assistants</h3>
+              <p>The AstraPath skill and MCP server let your assistant answer “how do I get to…?”</p>
+            </div>
+            <span class="status">Available</span>
+            <span class="go" aria-hidden="true">↗</span>
+          </a>
+          <a class="platform" href="#get-started">
+            <div>
+              <h3>AR glasses</h3>
+              <p>Directions in your line of sight.</p>
+            </div>
+            <span class="status">In development</span>
+            <span class="go" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper band" id="running">
+      <div class="shell">
+        <h2>Running at Columbia. Tested in supertall towers.</h2>
+        <div class="stats">
+          <div>
+            <p class="stat">4</p>
+            <p>Buildings live at Columbia</p>
+          </div>
+          <div>
+            <p class="stat">10+</p>
+            <p>Real buildings tested</p>
+          </div>
+          <div>
+            <p class="stat">2</p>
+            <p>Countries, the US and China</p>
+          </div>
+        </div>
+        <div class="directories">
+          <div>
+            <p class="kicker">Live demo</p>
+            <ol class="directory">
+              <li><span>01</span>Northwest Corner Building</li>
+              <li><span>02</span>Pupin</li>
+              <li><span>03</span>CEPSR</li>
+              <li><span>04</span>Mudd</li>
+            </ol>
+            <p class="dir-link"><a href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">Open the Columbia demo <span aria-hidden="true">↗</span></a></p>
+          </div>
+          <div>
+            <p class="kicker">Also tested</p>
+            <ol class="directory">
+              <li><span>01</span>Shanghai World Financial Center</li>
+              <li><span>02</span>CWTC 3A</li>
+              <li><span>03</span>Other towers and campuses</li>
+              <li><span>04</span>TopoNavi, open source (Apache-2.0)</li>
+            </ol>
+            <p class="dir-note">Our routing engine is open source, so anyone can see how a route is made.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="poster" id="quote">
+      <div class="shell">
+        <blockquote>
+          <p>I just want someone to tell me exactly where to go.</p>
+          <footer>A student we interviewed, on finding a room while in a rush</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="paper wait" id="buildings">
+      <div class="shell wait-grid" id="get-started">
+        <div>
+          <p class="kicker">For buildings</p>
+          <h2>Free for the people walking it.</h2>
+          <p class="lead">Buildings pay for the map, at an affordable price that scales with the building. Join the list and we’ll follow up about yours.</p>
+          <p class="lead quiet">It started with getting people to the right room. Doing that well means modeling each building: its hallways, doors, elevators, and rules.</p>
+        </div>
+        <div class="wait-card">
+          <h3>Be first when AstraPath reaches your building.</h3>
+          <p>We’ll email you when your building is mapped, plus a short update now and then as we build.</p>
+          <form id="waitlist" novalidate>
+            <div class="hp" aria-hidden="true">
+              <label>Leave this empty <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+            </div>
+            <fieldset>
+              <legend>How should we follow up?</legend>
+              <div class="choices">
+                <label><input type="radio" name="audience" value="walker" checked> I’m finding my way</label>
+                <label><input type="radio" name="audience" value="building"> I run a building</label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <label for="email">Email address</label>
+              <div class="email-row">
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required>
+                <button type="submit">Join the waitlist</button>
+              </div>
+              <p class="form-error" id="form-error" role="alert" hidden></p>
+            </div>
+            <p class="fine">This preview keeps your email in this browser only. It is not sent to a server.</p>
+          </form>
+          <div class="thanks" id="thanks" hidden tabindex="-1">
+            <h3 id="thanks-title">You’re on the list.</h3>
+            <p id="thanks-copy"></p>
+            <button type="button" class="text-btn" id="waitlist-reset">Use a different email</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer-grid">
+      <div>
+        <a class="brand brand-footer" href="#top" aria-label="AstraPath, home">
+          <img src="assets/mark-white.png" alt="" width="36" height="26">
+          <img src="assets/word-white.png" alt="" width="112" height="18">
+        </a>
+        <p>Indoor directions, from the front door to the room. Made by Columbia students.</p>
+      </div>
+      <div>
+        <p class="kicker">Product</p>
+        <ul>
+          <li><a href="#method">How it works</a></li>
+          <li><a href="#platforms">Platforms</a></li>
+          <li><a href="#running">Where it runs</a></li>
+          <li><a href="https://astrapath-indoornav.netlify.app/" target="_blank" rel="noopener">Columbia demo</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="kicker">Company</p>
+        <ul>
+          <li><a href="#buildings">For buildings</a></li>
+          <li><a href="#get-started">Waitlist</a></li>
+          <li><a href="#heard">What we heard</a></li>
+          <li><a href="#quote">In their words</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="kicker">Engine</p>
+        <ul>
+          <li><a href="#running">TopoNavi</a></li>
+          <li><a href="#method">Routes from the map</a></li>
+          <li><a href="#platforms">AI assistants</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="shell footer-base">
+      <p>© 2026 AstraPath</p>
+      <p>Free for everyone walking.</p>
+    </div>
+  </footer>
+
+  <noscript>
+    <style>.feature[hidden]{display:block !important;margin-top:16px}</style>
+  </noscript>
+  <script src="js/main.js"></script>
+</body>
+</html>
