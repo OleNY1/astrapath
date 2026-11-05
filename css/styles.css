@@ -498,10 +498,12 @@ html.search-open { overflow: hidden; }
 
 .hero-plan {
   position: absolute;
-  width: min(340px, 34vw);
-  left: 28px;
-  bottom: 72px;
-  overflow: visible;
+  height: min(270px, 32vh);
+  width: auto;
+  left: 36px;
+  bottom: 58px;
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 .hero-shade {
@@ -619,11 +621,84 @@ html.search-open { overflow: hidden; }
   color: #fff;
 }
 
-.feature-visual svg {
+.feature-visual svg,
+.campus-view {
   width: 100%;
   height: 100%;
   display: block;
 }
+
+.campus-view {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: pan-y;
+  background: #000;
+}
+
+#panel-columbia .feature-visual,
+#panel-stepfree .feature-visual,
+#panel-assist .feature-visual,
+#panel-towers .feature-visual { background: #000; }
+
+.plate,
+.caption { z-index: 2; }
+
+.assist-tags {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.assist-tags span {
+  position: absolute;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -100%);
+  transition: opacity 0.4s ease;
+}
+
+.assist-steps {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 2;
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(16, 17, 22, 0.82);
+  counter-reset: step;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.assist-steps li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.35s ease;
+  counter-increment: step;
+}
+
+.assist-steps li::before {
+  content: "0" counter(step);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.assist-steps li.is-on { color: #fff; }
 
 .visual-assist {
   background:
@@ -671,6 +746,12 @@ html.search-open { overflow: hidden; }
 
 .plate a:hover .go,
 .platform:hover .go { transform: translate(3px, -3px); }
+
+#panel-columbia .caption {
+  left: 22px;
+  right: auto;
+  max-width: min(380px, calc(100% - 44px));
+}
 
 .caption {
   position: absolute;
@@ -1178,6 +1259,7 @@ legend {
 }
 
 @media (max-width: 720px) {
+  .assist-steps { display: none; }
   .banner-full { display: none; }
   .banner-short { display: inline; }
   .header { padding: 0 12px; }
@@ -1197,6 +1279,12 @@ legend {
   .hero-meta span:last-child { display: none; }
   .feature-frame { width: calc(100% - 20px); }
   .feature-visual { height: auto; min-height: 520px; border-radius: 14px; }
+  #panel-columbia .caption {
+    left: 14px;
+    right: auto;
+    bottom: 14px;
+    max-width: min(230px, 68%);
+  }
   .plate { top: 14px; left: 14px; padding: 18px; }
   .caption { left: 14px; right: 14px; max-width: none; }
   .platform {
