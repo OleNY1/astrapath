@@ -284,4 +284,10 @@
     form.reset();
     document.getElementById("email").focus();
   });
+
+  const heroVideo = document.getElementById("hero-video");
+  if (heroVideo && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    heroVideo.removeAttribute("autoplay");
+    heroVideo.pause();
+  }
 })();

@@ -101,18 +101,16 @@
   <main id="content">
     <section class="hero" id="top">
       <div class="hero-media" aria-hidden="true">
-        <img class="hero-mark" src="assets/mark-white.png" alt="">
-        <img class="hero-plan" src="assets/floor-plan.png" alt="">
+        <video class="hero-video" id="hero-video" src="assets/hero-bg.mp4?v=3" poster="assets/hero-bg.jpg?v=3" autoplay muted loop playsinline preload="auto"></video>
         <div class="hero-shade"></div>
       </div>
       <div class="hero-copy">
-        <h1>The right room, not just the right building.</h1>
-        <p class="deck">Maps get you to the front door. AstraPath takes you the rest of the way: which entrance, which hallway, which elevator, which door.</p>
+        <h1>Through every door, to the right room.</h1>
+        <p class="deck">Maps get you to the building. AstraPath finds the way inside, room by room: which entrance, which hallway, which elevator, which door.</p>
       </div>
       <div class="hero-meta">
         <span>Free for everyone walking</span>
         <span>On the web, nothing to install</span>
-        <span>Floor plan</span>
       </div>
     </section>
 
@@ -195,6 +193,7 @@
       <div class="shell">
         <div class="split">
           <div>
+            <p class="kicker">The problem</p>
             <h2>Getting to the building is solved.</h2>
             <p class="display-2">The minutes inside it are not.</p>
           </div>
@@ -203,7 +202,19 @@
 
         <div class="problems" id="heard">
           <article class="problem">
-            <p class="index">01</p>
+            <div class="problem-art" aria-hidden="true">
+              <span class="index">01</span>
+              <svg viewBox="0 0 160 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 76h148" opacity=".35"/>
+                <path d="M78 76V20h70v56"/>
+                <path d="M100 76V58h14v18"/>
+                <path class="dim" d="M88 30h10M106 30h10M124 30h14M88 42h10M106 42h10M124 42h14"/>
+                <path class="flow" d="M30 68H100" stroke-dasharray="3 5"/>
+                <path class="dim" d="M114 68h20v-14" stroke-dasharray="2 5"/>
+                <path d="M30 50c-7-9-11-15-11-21a11 11 0 0 1 22 0c0 6-4 12-11 21z"/>
+                <circle cx="30" cy="29" r="3.6"/>
+              </svg>
+            </div>
             <h3>Maps stop at the front door.</h3>
             <p>The map’s job ends at the building. Inside, people fall back on signs, room numbers, and following the crowd.</p>
             <blockquote>
@@ -212,7 +223,17 @@
             </blockquote>
           </article>
           <article class="problem">
-            <p class="index">02</p>
+            <div class="problem-art" aria-hidden="true">
+              <span class="index">02</span>
+              <svg viewBox="0 0 160 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="14" y="10" width="132" height="70" rx="2" opacity=".35"/>
+                <path class="dim" d="M14 36h40M14 54h40M66 10v26M66 54v26M96 10v26M96 54v26M126 54v26"/>
+                <path d="M54 36h92M54 54h92M54 36V10M54 54v26"/>
+                <path class="flow" d="M22 45h88v24" stroke-dasharray="3 5"/>
+                <path d="M104 72l12 0" opacity=".9"/>
+                <path d="M106 62l8 8M114 62l-8 8"/>
+              </svg>
+            </div>
             <h3>“Floor four” isn’t a direction.</h3>
             <p>Most people can find the floor. They lose the minutes choosing the hallway, then walking back from a dead end.</p>
             <blockquote>
@@ -221,8 +242,17 @@
             </blockquote>
           </article>
           <article class="problem">
-            <p class="index">03</p>
-            <h3>One wrong turn ends the trust.</h3>
+            <div class="problem-art" aria-hidden="true">
+              <span class="index">03</span>
+              <svg viewBox="0 0 160 90" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M46 14v62" stroke-width="4"/>
+                <path class="dim" d="M46 14h96M46 76h96" opacity=".35"/>
+                <path class="flow" d="M118 82V40H60" stroke-dasharray="3 5"/>
+                <path d="M68 32l-8 8 8 8"/>
+                <path d="M30 34l8 8M38 34l-8 8"/>
+              </svg>
+            </div>
+            <h3>Wrong turns break trust.</h3>
             <p>Asked what would worry them, four of the six people we interviewed about indoor directions named accuracy first.</p>
             <blockquote>
               <p>“If it tells me to turn left and there’s actually no hallway there, I’m going to stop trusting it.”</p>
@@ -255,18 +285,9 @@
           </li>
         </ol>
 
-        <div class="specimen">
-          <div>
-            <p class="kicker">A real Columbia route</p>
-            <h3>Northwest Corner Building</h3>
-            <p class="specimen-line">West Gate, floor 1 <span aria-hidden="true">→</span> Water fountain, library side, floor 5</p>
-            <p class="specimen-meta">7 steps · about 2 min · 3 rides · 2 changes</p>
-          </div>
-          <ol class="legs">
-            <li><span>01</span><div><strong>Stairs</strong><p>Floor 1 to floor 2</p></div></li>
-            <li><span>02</span><div><strong>Escalator</strong><p>Floor 2 to floor 4</p></div></li>
-            <li><span>03</span><div><strong>Library stairs</strong><p>Floor 4 to floor 5</p></div></li>
-          </ol>
+        <div class="specimen" aria-label="A video of a real Columbia route will go here later.">
+          <p class="kicker">A real Columbia route</p>
+          <p class="specimen-soon">Video coming later</p>
         </div>
 
         <div class="ai-block">
@@ -296,17 +317,21 @@
 
     <section class="paper who" id="who">
       <div class="shell">
+        <p class="kicker">Who it’s for</p>
         <h2>One building, a different route for each person.</h2>
         <div class="who-grid">
           <article>
+            <span>01</span>
             <h3>First visit, ten minutes to spare</h3>
             <p>Which hallway, which stairwell, and which elevator actually goes to your floor.</p>
           </article>
           <article>
+            <span>02</span>
             <h3>Visiting, not working there</h3>
             <p>The entrance visitors use and where to check in. Where a building shares its access rules, the route uses only doors open to you.</p>
           </article>
           <article>
+            <span>03</span>
             <h3>Need the step-free way</h3>
             <p>Ramps and elevators, with the elevator named and the floors it reaches. Step-free is a route of its own, not a hidden setting.</p>
           </article>
